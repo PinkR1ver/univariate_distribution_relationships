@@ -321,7 +321,7 @@ def gamma(alpha, beta):
     formula = r'''Y \sim \text{Gamma}(\beta, \alpha)'''
     st.latex(formula)
     
-    content = r'''Here, ($\alpha = n$), and ($\beta$) is the inverse of ($\theta), where ($\theta$) represents the rate of event occurrence per unit time.'''
+    content = r'''Here, ($\alpha = n$), and ($\beta$) is the inverse of ($\theta$), where ($\theta$) represents the rate of event occurrence per unit time.'''
     st.markdown(content)
     
     formula = r'''\text{PDF}(x) = \frac{\beta^\alpha x^{\alpha-1} e^{-\beta x}}{\Gamma(\alpha)}'''
