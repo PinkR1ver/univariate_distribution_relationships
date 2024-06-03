@@ -170,6 +170,35 @@ def beta_distribution(a, b):
     st.markdown(link)
     
 @st.cache_data
+def poisson(t, llambda):
+    
+    st.subheader('Poisson Distribution')
+    
+    k = np.arange(0, 20, 1)
+    y = [np.exp(-llambda * t) * (llambda * t)**i / math.factorial(i) for i in k]
+    
+    fig = figure(title='Poisson Distribution', x_axis_label='k', y_axis_label='Probability')
+    fig.vbar(x=k, top=y, width=0.5)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    step = k[1] - k[0]
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Poisson Distribution CDF', x_axis_label='k', y_axis_label='Cumulative Probability')
+    fig.line(k, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    formula = r'''\text{PDF}(k) = \frac{e^{-\lambda t}(\lambda t)^k}{k!}'''
+    st.latex(formula)
+    
+    content = r'''Learn details about Poisson Distribution:'''
+    st.markdown(content)
+    
+    content = r'''[Poisson Distribution](https://pinktalk.online/math/Statistics/basic_concepot/distribution/exponential_distribution_and_poisson_distribution)'''
+    st.markdown(content)
+    
+@st.cache_data
 def cauchy(x0, gamma):
         
         st.subheader('Cauchy Distribution')
@@ -222,13 +251,49 @@ def chi(n):
     formula = r'''\text{CDF}(x) = \int_0^x \frac{t^{n-1} e^{-\frac{t^2}{2}}}{2^{\frac{n}{2}-1} (n-1)!} dt = \frac{1}{\Gamma\left(\frac{n}{2}\right)} \gamma\left(\frac{n}{2}, \frac{x^2}{2}\right)'''
     st.latex(formula)
     
+
+@st.cache_data
+def chi_square(n):
+    
+    st.subheader('Chi-Square Distribution')
+    
+    x = np.arange(0.001, 20, 0.001)
+    y = [x**(n/2-1) * np.exp(-x/2) / (2**(n/2) * math.gamma(n/2)) for x in x]
+    
+    fig = figure(title='Chi-Square Distribution', x_axis_label='x', y_axis_label='Probability Density')
+    fig.line(x, y, line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    step = x[1] - x[0]
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Chi-Square Distribution CDF', x_axis_label='x', y_axis_label='Cumulative Probability')
+    fig.line(x, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    content = r'''Let ( $X_1$, $X_2$, ..., $X_n$ ) be independent and identically distributed standard normal random variables. The sum of the squares of these random variables, denoted as (Y) (i.e., ($Y = X_1^2 + X_2^2 + ... + X_n^2$)), follows a Chi-Square distribution with $n$ degrees of freedom, which can be expressed as:'''
+    st.markdown(content)
+    
+    formula = r'''Y \sim \chi^2(n)'''
+    st.latex(formula)
+    
+    content = r'''The probability density function (PDF) of the Chi-Square distribution is given by the following formula:'''
+    st.markdown(content)
+    
+    formula = r'''\text{PDF}(x) = \frac{x^{\frac{n}{2}-1} e^{-\frac{x}{2}}}{2^{\frac{n}{2}} \Gamma\left(\frac{n}{2}\right)}'''
+    st.latex(formula)
+    
+    formula = r'''\text{CDF}(x) = \int_0^x \frac{t^{\frac{n}{2}-1} e^{-\frac{t}{2}}}{2^{\frac{n}{2}} \Gamma\left(\frac{n}{2}\right)} dt = \frac{1}{\Gamma\left(\frac{n}{2}\right)} \gamma\left(\frac{n}{2}, \frac{x}{2}\right)'''
+    st.latex(formula)
+    
 @st.cache_data
 def gamma(alpha, beta):
     
     st.subheader('Gamma Distribution')
     
     x = np.arange(0.001, 20, 0.001)
-    y = [x**(alpha-1) * np.exp(-x/beta) / (beta**alpha * math.gamma(alpha)) for x in x]
+    y = [beta**alpha * i**(alpha-1) * np.exp(-beta*i) / math.gamma(alpha) for i in x]
     
     fig = figure(title='Gamma Distribution', x_axis_label='x', y_axis_label='Probability Density')
     fig.line(x, y, line_width=2)
@@ -247,23 +312,51 @@ def gamma(alpha, beta):
     content = r'''Let ( $X_1$, $X_2$, ..., $X_n$ ) be the waiting times between consecutive events, and assume that these (n) waiting times are independent. The sum of these (n) waiting times, denoted as (Y) (i.e., ($Y = X_1 + X_2 + ... + X_n$)), follows a Gamma distribution, which can be expressed as:'''
     st.markdown(content)
     
-    formula = r'''Y \sim \text{Gamma}(\alpha, \beta)'''
+    formula = r'''Y \sim \text{Gamma}(\theta, k)'''
     st.latex(formula)
     
     content = r'''or alternatively,'''
     st.markdown(content)
     
-    formula = r'''Y \sim \text{Gamma}(n, \lambda)'''
+    formula = r'''Y \sim \text{Gamma}(\beta, \alpha)'''
     st.latex(formula)
     
-    content = r'''Here, ($\alpha = n$), and ($\beta$) is the inverse of ($\lambda$), where ($\lambda$) represents the rate of event occurrence per unit time.'''
+    content = r'''Here, ($\alpha = n$), and ($\beta$) is the inverse of ($\theta), where ($\theta$) represents the rate of event occurrence per unit time.'''
     st.markdown(content)
     
-    formula = r'''\text{PDF}(x) = \frac{x^{\alpha-1} e^{-\frac{x}{\beta}}}{\beta^\alpha \Gamma(\alpha)}'''
+    formula = r'''\text{PDF}(x) = \frac{\beta^\alpha x^{\alpha-1} e^{-\beta x}}{\Gamma(\alpha)}'''
     st.latex(formula)
     
-    formula = r'''\text{CDF}(x) = \int_0^x \frac{t^{\alpha-1} e^{-\frac{t}{\beta}}}{\beta^\alpha \Gamma(\alpha)} dt = \frac{1}{\Gamma(\alpha)} \gamma(\alpha, \frac{x}{\beta})'''
+    formula = r'''\text{CDF}(x) = \int_0^x \frac{\beta^\alpha t^{\alpha-1} e^{-\beta t}}{\Gamma(\alpha)} dt = \frac{1}{\Gamma(\alpha)} \gamma(\alpha, \beta x)'''
     st.latex(formula)
+    
+    content = r'''Learn more details, see the link:'''
+    st.markdown(content)
+
+    link = '''[Gamma Distribution](https://pinktalk.online/math/Statistics/basic_concepot/distribution/gamma_distribution)'''
+    st.markdown(link)
+    
+    
+@st.cache_data
+def erlang(k, mu):
+    
+    st.subheader('Erlang Distribution')
+    
+    x = np.arange(0.001, 20, 0.001)
+    y = [mu**k * i**(k-1) * np.exp(-mu*i) / math.factorial(k-1) for i in x]
+    
+    fig = figure(title='Erlang Distribution', x_axis_label='x', y_axis_label='Probability Density')
+    fig.line(x, y, line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    step = x[1] - x[0]
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Erlang Distribution CDF', x_axis_label='x', y_axis_label='Cumulative Probability')
+    fig.line(x, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
     
     
     
@@ -283,7 +376,8 @@ if __name__ == '__main__':
         if add_selectbox1 == 'Discrete Distributions':
             add_selectbox2 = st.selectbox(
                 'Select a Distribution',
-                ('Benford Distribution', 'Bernoulli Distribution', 'Beta-Binomial Distribution')
+                ('Benford Distribution', 'Bernoulli Distribution', 'Beta-Binomial Distribution',
+                 'Poisson Distribution')
             )
             
             if add_selectbox2 == 'Bernoulli Distribution':
@@ -292,11 +386,17 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Beta-Binomial Distribution':
                 a = st.slider('Shape Parameter (a)', 0.1, 100.0, 1.0)
                 b = st.slider('Shape Parameter (b)', 0.1, 100.0, 1.0)
+                
+            elif add_selectbox2 == 'Poisson Distribution':
+                llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
+                t = st.slider('Time Interval (t)', 0.1, 10.0, 1.0)
             
         elif add_selectbox1 == 'Continuous Distributions':
             add_selectbox2 = st.selectbox(
                 'Select a Distribution',
-                ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 'Cauchy Distribution', 'Chi Distribution', 'Gamma Distribution')
+                ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 
+                 'Cauchy Distribution', 'Chi Distribution', 'Chi-square Distribution', 
+                 'Erlang Distribution', 'Gamma Distribution')
             )
             
             if add_selectbox2 == 'Beta Distribution':
@@ -313,10 +413,17 @@ if __name__ == '__main__':
                 
             elif add_selectbox2 == 'Chi Distribution':
                 n = st.slider('Degrees of Freedom (n)', 1, 10, 1)
+            
+            elif add_selectbox2 == 'Chi-square Distribution':
+                n = st.slider('Degrees of Freedom (n)', 1, 10, 1)
                 
             elif add_selectbox2 == 'Gamma Distribution':
                 alpha = st.slider('Shape Parameter (α)', 0.1, 10.0, 1.0)
                 beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
+                
+            elif add_selectbox2 == 'Erlang Distribution':
+                k = st.slider('Stage Parameter (k)', 1, 10, 1)
+                mu = st.slider('Average (μ)', 0.1, 10.0, 1.0)
         
         
     if add_selectbox1 == 'Discrete Distributions':
@@ -330,6 +437,8 @@ if __name__ == '__main__':
                 bernoulli(p)
             case 'Beta-Binomial Distribution':
                 beta_binomial(a, b)
+            case 'Poisson Distribution':
+                poisson(t, llambda)
             
     elif add_selectbox1 == 'Continuous Distributions':
         
@@ -346,6 +455,10 @@ if __name__ == '__main__':
                 cauchy(x0, gamma)
             case 'Chi Distribution':
                 chi(n)
+            case 'Chi-square Distribution':
+                chi_square(n)
+            case 'Erlang Distribution':
+                erlang(k, mu)
             case 'Gamma Distribution':
                 gamma(alpha, beta)
         
