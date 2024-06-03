@@ -396,7 +396,7 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Beta-Binomial Distribution':
                 a = st.slider('Shape Parameter (a)', 0.1, 10.0, 1.0)
                 b = st.slider('Shape Parameter (b)', 0.1, 10.0, 1.0)
-                n = st.slider('Number of Trials (n)', 1, 20, 1)
+                n = st.slider('Number of Trials (n)', 2, 40, 5)
                 
             elif add_selectbox2 == 'Poisson Distribution':
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
