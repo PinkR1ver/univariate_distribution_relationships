@@ -103,10 +103,10 @@ def beta_binomial(a, b, n):
     st.subheader('Beta-Binomial Distribution')
 
     x = np.arange(0, n, 1)
-    y = [math.comb(20, i) * beta(i + a, 20 - i + b) / beta(a, b) for i in x]
+    y = [math.comb(n, i) * beta(i + a, n - i + b) / beta(a, b) for i in x]
         
     fig = figure(title='Beta-Binomial Distribution', x_axis_label='x', y_axis_label='Probability Density')
-    fig.line(x, y, line_width=2)
+    fig.vbar(x=x, top=y, width=0.5)
     st.bokeh_chart(fig, use_container_width=True)
     
     step = x[1] - x[0]   
