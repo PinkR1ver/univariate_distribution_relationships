@@ -98,11 +98,11 @@ def artangent(llambda, theta):
     formula = r'''\text{PDF}(x) = \frac{\lambda}{(\arctan(\lambda \theta) + \frac{\pi}{2})(1 + \lambda^2(x - \theta)^2)}'''
     st.latex(formula)
 
-def beta_binomial(a, b):
+def beta_binomial(a, b, n):
     
     st.subheader('Beta-Binomial Distribution')
 
-    x = np.arange(0, 20, 1)
+    x = np.arange(0, n, 1)
     y = [math.comb(20, i) * beta(i + a, 20 - i + b) / beta(a, b) for i in x]
         
     fig = figure(title='Beta-Binomial Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -396,6 +396,7 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Beta-Binomial Distribution':
                 a = st.slider('Shape Parameter (a)', 0.1, 10.0, 1.0)
                 b = st.slider('Shape Parameter (b)', 0.1, 10.0, 1.0)
+                n = st.slider('Number of Trials (n)', 1, 20, 1)
                 
             elif add_selectbox2 == 'Poisson Distribution':
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
@@ -446,7 +447,7 @@ if __name__ == '__main__':
             case 'Bernoulli Distribution':
                 bernoulli(p)
             case 'Beta-Binomial Distribution':
-                beta_binomial(a, b)
+                beta_binomial(a, b, n)
             case 'Poisson Distribution':
                 poisson(t, llambda)
             
