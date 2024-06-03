@@ -6,6 +6,7 @@ import scipy.integrate as spi
 import math
 
 
+
 @st.cache_data
 def benford():
     
@@ -101,19 +102,28 @@ def beta_binomial(a, b):
     
     st.subheader('Beta-Binomial Distribution')
 
-    x = np.arange(0, 1, 0.001)
-    y = [i**(a-1) * (1-i)**(b-1) for i in x]
-    y = np.array(y)
-    y = y / beta(a, b)
+    x = np.arange(0, 20, 1)
+    y = [math.comb(20, i) * beta(i + a, 20 - i + b) / beta(a, b) for i in x]
         
     fig = figure(title='Beta-Binomial Distribution', x_axis_label='x', y_axis_label='Probability Density')
     fig.line(x, y, line_width=2)
     st.bokeh_chart(fig, use_container_width=True)
     
+    step = x[1] - x[0]   
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Beta-Binomial Distribution CDF', x_axis_label='x', y_axis_label='Cumulative Probability')
+    fig.line(x, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
     content = '''The Beta-Binomial distribution is a compound probability distribution that combines the Beta distribution and the Binomial distribution. The Beta distribution is used to model the prior distribution of the probability of success in a Bernoulli trial, while the Binomial distribution models the likelihood of observing a certain number of successes in a fixed number of Bernoulli trials. The probability mass function of the Beta-Binomial distribution is given by the following formula:'''
     st.markdown(content)
     
-    formula = r'''P(x) = \frac{}{Beta(a, b)}'''
+    formula = r'''P(x) = \binom{n}{x} \frac{B(x + \alpha, n - x + \beta)}{B(\alpha, \beta)}'''
+    st.latex(formula)
+    
+    formula = r'''B(\alpha, \beta) = \int_0^1 t^{\alpha - 1} (1 - t)^{\beta - 1} dt = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha + \beta)}'''
     st.latex(formula)
     
     link = '''[Serrano.Academy. The Beta Distribution in 12 Minutes! 2021. YouTube](https://www.youtube.com/watch?v=juF3r12nM5A)'''
@@ -384,8 +394,8 @@ if __name__ == '__main__':
                 p = st.slider('Probability of Success (p)', 0.0, 1.0, 0.5)
                 
             elif add_selectbox2 == 'Beta-Binomial Distribution':
-                a = st.slider('Shape Parameter (a)', 0.1, 100.0, 1.0)
-                b = st.slider('Shape Parameter (b)', 0.1, 100.0, 1.0)
+                a = st.slider('Shape Parameter (a)', 0.1, 10.0, 1.0)
+                b = st.slider('Shape Parameter (b)', 0.1, 10.0, 1.0)
                 
             elif add_selectbox2 == 'Poisson Distribution':
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
