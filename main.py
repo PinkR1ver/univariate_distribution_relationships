@@ -367,12 +367,55 @@ def erlang(k, mu, x_range):
     fig.line(x, np.cumsum(y), line_width=2)
     st.bokeh_chart(fig, use_container_width=True)
     
+
+@st.cache_data
+def exponential(llambda, x_range):
+    
+    st.subheader('Exponential Distribution')
+    
+    x = np.arange(0.001, x_range, 0.001)
+    y = [llambda * np.exp(-llambda * i) for i in x]
+    
+    fig = figure(title='Exponential Distribution', x_axis_label='x', y_axis_label='Probability Density')
+    fig.line(x, y, line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    step = x[1] - x[0]
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Exponential Distribution CDF', x_axis_label='x', y_axis_label='Cumulative Probability')
+    fig.line(x, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    formula = r'''\text{PDF}(x) = \lambda e^{-\lambda x}'''
+    st.latex(formula)
+    
+    formula = r'''\text{CDF}(x) = 1 - e^{-\lambda x}'''
+    st.latex(formula)
+    
 @st.cache_data
 def student(nu, x_left_range, x_right_range):
     
     st.subheader('Student\'s t Distribution')
     
     x = np.arange(x_left_range, x_right_range, 0.001)
+    y = [math.gamma((nu + 1) / 2) / (math.sqrt(nu * math.pi) * math.gamma(nu / 2) * (1 + i**2 / nu)**((nu + 1) / 2)) for i in x]
+    
+    fig = figure(title='Student\'s t Distribution', x_axis_label='x', y_axis_label='Probability Density')
+    fig.line(x, y, line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    step = x[1] - x[0]
+    y = np.array(y)
+    y = y * step
+    
+    fig = figure(title='Student\'s t Distribution CDF', x_axis_label='x', y_axis_label='Cumulative Probability')
+    fig.line(x, np.cumsum(y), line_width=2)
+    st.bokeh_chart(fig, use_container_width=True)
+    
+    formula = r'''\text{PDF}(x) = \frac{\Gamma\left(\frac{\nu + 1}{2}\right)}{\sqrt{\nu \pi} \Gamma\left(\frac{\nu}{2}\right) \left(1 + \frac{x^2}{\nu}\right)^{\frac{\nu + 1}{2}}}'''
+    st.latex(formula)
     
     
 @st.cache_data
@@ -418,7 +461,8 @@ if __name__ == '__main__':
                 'Select a Distribution',
                 ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 
                  'Cauchy Distribution', 'Chi Distribution', 'Chi-square Distribution', 
-                 'Erlang Distribution', 'Gamma Distribution')
+                 'Erlang Distribution', 'Exponential Distribution', 'Gamma Distribution', 
+                 'Student\'s t Distribution')
             )
             
             if add_selectbox2 == 'Beta Distribution':
@@ -449,10 +493,19 @@ if __name__ == '__main__':
                 mu = st.slider('Average (μ)', 0.1, 10.0, 1.0)
                 x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
                 
+            elif add_selectbox2 == 'Exponential Distribution':
+                llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0) 
+                
             elif add_selectbox2 == 'Gamma Distribution':
                 alpha = st.slider('Shape Parameter (α)', 0.1, 10.0, 1.0)
                 beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
                 x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
+                
+            elif add_selectbox2 == 'Student\'s t Distribution':
+                nu = st.slider('Degrees of Freedom (ν)', 1.0, 100.0, 1.0)
+                x_left_range = st.slider('X-axis Negative Range', -100.0, -1.0, -10.0)
+                x_right_range = st.slider('X-axis Positive Range', 1.0, 100.0, 10.0)
         
         
     if add_selectbox1 == 'Discrete Distributions':
@@ -488,6 +541,10 @@ if __name__ == '__main__':
                 chi_square(n, x_range)
             case 'Erlang Distribution':
                 erlang(k, mu, x_range)
+            case 'Exponential Distribution':
+                exponential(llambda, x_range)
             case 'Gamma Distribution':
                 gamma(alpha, beta, x_range)
+            case 'Student\'s t Distribution':
+                student(nu, x_left_range, x_right_range)
         
