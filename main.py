@@ -81,11 +81,11 @@ def arcsin():
     
     
 @st.cache_data
-def artangent(llambda, theta):
+def artangent(llambda, theta, x_range):
     
     st.subheader('Artangent Distribution')
     
-    x = np.arange(0.01, 10, 0.01)
+    x = np.arange(0, x_range, 0.001)
     y = [llambda / ((np.arctan(llambda * theta) + np.pi / 2) * (1 + llambda ** 2 * (i - theta) ** 2)) for i in x]
     
     fig = figure(title='Artangent Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -180,11 +180,11 @@ def beta_distribution(a, b):
     st.markdown(link)
     
 @st.cache_data
-def poisson(t, llambda):
+def poisson(t, llambda, k_range):
     
     st.subheader('Poisson Distribution')
     
-    k = np.arange(0, 20, 1)
+    k = np.arange(0, k_range, 1)
     y = [np.exp(-llambda * t) * (llambda * t)**i / math.factorial(i) for i in k]
     
     fig = figure(title='Poisson Distribution', x_axis_label='k', y_axis_label='Probability')
@@ -209,11 +209,11 @@ def poisson(t, llambda):
     st.markdown(content)
     
 @st.cache_data
-def cauchy(x0, gamma):
+def cauchy(x0, gamma, x_left_range, x_right_range):
         
         st.subheader('Cauchy Distribution')
         
-        x = np.arange(-10, 10, 0.001)
+        x = np.arange(x_left_range, x_right_range, 0.001)
         y = [1 / (np.pi * gamma * (1 + ((i - x0) / gamma) ** 2)) for i in x]
         
         fig = figure(title='Cauchy Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -236,12 +236,12 @@ def cauchy(x0, gamma):
         
 
 @st.cache_data
-def chi(n):
+def chi(n, x_range):
     
     st.subheader('Chi Distribution')
     
-    x = np.arange(0.001, 10, 0.001)
-    y = [x**(n-1) * np.exp(-x**2 / 2) / (2**(n/2-1) * math.factorial(n-1)) for x in x]
+    x = np.arange(0, x_range, 0.001)
+    y = [x**(n-1) * np.exp(-x**2 / 2) / (2**(n/2-1) * math.gamma(float(n/2))) for x in x]
     
     fig = figure(title='Chi Distribution', x_axis_label='x', y_axis_label='Probability Density')
     fig.line(x, y, line_width=2)
@@ -255,19 +255,19 @@ def chi(n):
     fig.line(x, np.cumsum(y), line_width=2)
     st.bokeh_chart(fig, use_container_width=True)
     
-    formula = r'''\text{PDF}(x) = \frac{x^{n-1} e^{-\frac{x^2}{2}}}{2^{\frac{n}{2}-1} (n-1)!}'''
+    formula = r'''\text{PDF}(x) = \frac{x^{n-1} e^{-\frac{x^2}{2}}}{2^{\frac{n}{2}-1} \Gamma\left(\frac{n}{2}\right)}'''
     st.latex(formula)
     
-    formula = r'''\text{CDF}(x) = \int_0^x \frac{t^{n-1} e^{-\frac{t^2}{2}}}{2^{\frac{n}{2}-1} (n-1)!} dt = \frac{1}{\Gamma\left(\frac{n}{2}\right)} \gamma\left(\frac{n}{2}, \frac{x^2}{2}\right)'''
+    formula = r'''\text{CDF}(x) = \int_0^x \frac{t^{n-1} e^{-\frac{t^2}{2}}}{2^{\frac{n}{2}-1} \Gamma\left(\frac{n}{2}\right)} dt = \frac{1}{\Gamma\left(\frac{n}{2}\right)} \gamma\left(\frac{n}{2}, \frac{x^2}{2}\right)'''
     st.latex(formula)
     
 
 @st.cache_data
-def chi_square(n):
+def chi_square(n, x_range):
     
     st.subheader('Chi-Square Distribution')
     
-    x = np.arange(0.001, 20, 0.001)
+    x = np.arange(0.001, x_range, 0.001)
     y = [x**(n/2-1) * np.exp(-x/2) / (2**(n/2) * math.gamma(n/2)) for x in x]
     
     fig = figure(title='Chi-Square Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -298,11 +298,11 @@ def chi_square(n):
     st.latex(formula)
     
 @st.cache_data
-def gamma(alpha, beta):
+def gamma(alpha, beta, x_range):
     
     st.subheader('Gamma Distribution')
     
-    x = np.arange(0.001, 20, 0.001)
+    x = np.arange(0.001, x_range, 0.001)
     y = [beta**alpha * i**(alpha-1) * np.exp(-beta*i) / math.gamma(alpha) for i in x]
     
     fig = figure(title='Gamma Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -348,11 +348,11 @@ def gamma(alpha, beta):
     
     
 @st.cache_data
-def erlang(k, mu):
+def erlang(k, mu, x_range):
     
     st.subheader('Erlang Distribution')
     
-    x = np.arange(0.001, 20, 0.001)
+    x = np.arange(0.001, x_range, 0.001)
     y = [mu**k * i**(k-1) * np.exp(-mu*i) / math.factorial(k-1) for i in x]
     
     fig = figure(title='Erlang Distribution', x_axis_label='x', y_axis_label='Probability Density')
@@ -367,8 +367,18 @@ def erlang(k, mu):
     fig.line(x, np.cumsum(y), line_width=2)
     st.bokeh_chart(fig, use_container_width=True)
     
+@st.cache_data
+def student(nu, x_left_range, x_right_range):
+    
+    st.subheader('Student\'s t Distribution')
+    
+    x = np.arange(x_left_range, x_right_range, 0.001)
     
     
+@st.cache_data
+def noncentral_t():
+     
+    st.subheader('Noncentral Student\'s t Distribution') 
     
     
     
@@ -401,6 +411,7 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Poisson Distribution':
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
                 t = st.slider('Time Interval (t)', 0.1, 10.0, 1.0)
+                k = st.slider('X-axis, Number of Events (k)', 2, 80, 2)
             
         elif add_selectbox1 == 'Continuous Distributions':
             add_selectbox2 = st.selectbox(
@@ -417,24 +428,31 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Arctangent Distribution':
                 llambda = st.slider('Shape Parameter (λ)', 0.1, 10.0, 1.0)
                 theta = st.slider('Shape Parameter (θ)', 0.1, 10.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
                 
             elif add_selectbox2 == 'Cauchy Distribution':
                 x0 = st.slider('Location Parameter (x0)', -10.0, 10.0, 0.0)
                 gamma = st.slider('Scale Parameter (γ)', 0.1, 10.0, 1.0)
+                x_left_range = st.slider('X-axis Negative Range', -100.0, -1.0, -10.0)
+                x_right_range = st.slider('X-axis Positive Range', 1.0, 100.0, 10.0)
                 
             elif add_selectbox2 == 'Chi Distribution':
-                n = st.slider('Degrees of Freedom (n)', 1, 10, 1)
+                n = st.slider('Degrees of Freedom (n)', 1, 100, 1)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
             
             elif add_selectbox2 == 'Chi-square Distribution':
                 n = st.slider('Degrees of Freedom (n)', 1, 10, 1)
-                
-            elif add_selectbox2 == 'Gamma Distribution':
-                alpha = st.slider('Shape Parameter (α)', 0.1, 10.0, 1.0)
-                beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
                 
             elif add_selectbox2 == 'Erlang Distribution':
                 k = st.slider('Stage Parameter (k)', 1, 10, 1)
                 mu = st.slider('Average (μ)', 0.1, 10.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
+                
+            elif add_selectbox2 == 'Gamma Distribution':
+                alpha = st.slider('Shape Parameter (α)', 0.1, 10.0, 1.0)
+                beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
         
         
     if add_selectbox1 == 'Discrete Distributions':
@@ -449,7 +467,7 @@ if __name__ == '__main__':
             case 'Beta-Binomial Distribution':
                 beta_binomial(a, b, n)
             case 'Poisson Distribution':
-                poisson(t, llambda)
+                poisson(t, llambda, k)
             
     elif add_selectbox1 == 'Continuous Distributions':
         
@@ -461,15 +479,15 @@ if __name__ == '__main__':
             case 'Beta Distribution':
                 beta_distribution(a, b)
             case 'Arctangent Distribution':
-                artangent(llambda, theta)
+                artangent(llambda, theta, x_range)
             case 'Cauchy Distribution':
-                cauchy(x0, gamma)
+                cauchy(x0, gamma, x_left_range, x_right_range)
             case 'Chi Distribution':
-                chi(n)
+                chi(n, x_range)
             case 'Chi-square Distribution':
-                chi_square(n)
+                chi_square(n, x_range)
             case 'Erlang Distribution':
-                erlang(k, mu)
+                erlang(k, mu, x_range)
             case 'Gamma Distribution':
-                gamma(alpha, beta)
+                gamma(alpha, beta, x_range)
         
