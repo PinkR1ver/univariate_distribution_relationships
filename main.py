@@ -38,7 +38,8 @@ if __name__ == '__main__':
                 ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 
                  'Cauchy Distribution', 'Chi Distribution', 'Chi-square Distribution', 
                  'Erlang Distribution', 'Exponential Distribution', 'Exponential Power Distribution',
-                 'Gamma Distribution', 'Student\'s t Distribution')
+                 'Gamma Distribution', 'Gumbel Distribution', 'Student\'s t Distribution'
+                )
             )
             
             if add_selectbox2 == 'Beta Distribution':
@@ -83,6 +84,12 @@ if __name__ == '__main__':
                 beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
                 x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
                 
+            elif add_selectbox2 == 'Gumbel Distribution':
+                mu = st.slider('Location Parameter (μ)', -10.0, 10.0, 0.0)
+                beta = st.slider('Scale Parameter (β)', 0.1, 10.0, 1.0)
+                x_left_range = st.slider('X-axis Negative Range', -100.0, -1.0, -10.0)
+                x_right_range = st.slider('X-axis Positive Range', 1.0, 100.0, 10.0)
+                
             elif add_selectbox2 == 'Student\'s t Distribution':
                 nu = st.slider('Degrees of Freedom (ν)', 1.0, 100.0, 1.0)
                 x_left_range = st.slider('X-axis Negative Range', -100.0, -1.0, -10.0)
@@ -126,6 +133,8 @@ if __name__ == '__main__':
                 exponential(llambda, x_range)
             case 'Gamma Distribution':
                 gamma(alpha, beta, x_range)
+            case 'Gumbel Distribution':
+                gumbel(mu, beta, x_left_range, x_right_range)
             case 'Student\'s t Distribution':
                 student_t(nu, x_left_range, x_right_range)
             case 'Exponential Power Distribution':

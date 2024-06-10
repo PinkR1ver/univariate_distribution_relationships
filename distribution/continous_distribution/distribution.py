@@ -8,4 +8,5 @@ from .erlang import *
 from .exponential import *
 from .exponential_power import *
 from .gamma import *
+from .gumbel import *
 from .student_t import *
