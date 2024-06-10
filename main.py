@@ -37,8 +37,8 @@ if __name__ == '__main__':
                 'Select a Distribution',
                 ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 
                  'Cauchy Distribution', 'Chi Distribution', 'Chi-square Distribution', 
-                 'Erlang Distribution', 'Exponential Distribution', 'Gamma Distribution', 
-                 'Student\'s t Distribution')
+                 'Erlang Distribution', 'Exponential Distribution', 'Exponential Power Distribution',
+                 'Gamma Distribution', 'Student\'s t Distribution')
             )
             
             if add_selectbox2 == 'Beta Distribution':
@@ -72,7 +72,12 @@ if __name__ == '__main__':
             elif add_selectbox2 == 'Exponential Distribution':
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
                 x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0) 
-                
+            
+            elif add_selectbox2 == 'Exponential Power Distribution':
+                llambda = st.slider('Rate Parameter (λ)', 0.01, 3.0, 1.0)
+                kappa = st.slider('Shape Parameter (κ)', 0.01, 3.0, 1.0)
+                x_range = st.slider('X-axis Range', 1.0, 5.0, 2.0)
+            
             elif add_selectbox2 == 'Gamma Distribution':
                 alpha = st.slider('Shape Parameter (α)', 0.1, 10.0, 1.0)
                 beta = st.slider('Scale Parameter (β)', 0.1, 2.0, 1.0)
@@ -123,4 +128,6 @@ if __name__ == '__main__':
                 gamma(alpha, beta, x_range)
             case 'Student\'s t Distribution':
                 student_t(nu, x_left_range, x_right_range)
+            case 'Exponential Power Distribution':
+                exponential_power(llambda, kappa, x_range)
         
