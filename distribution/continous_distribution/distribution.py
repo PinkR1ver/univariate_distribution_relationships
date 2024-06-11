@@ -10,3 +10,4 @@ from .exponential_power import *
 from .gamma import *
 from .gumbel import *
 from .student_t import *
+from .F import *

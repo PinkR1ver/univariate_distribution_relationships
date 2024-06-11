@@ -92,7 +92,8 @@ if __name__ == '__main__':
                 ('Arcsin Distribution', 'Arctangent Distribution', 'Beta Distribution', 
                  'Cauchy Distribution', 'Chi Distribution', 'Chi-square Distribution', 
                  'Erlang Distribution', 'Exponential Distribution', 'Exponential Power Distribution',
-                 'Gamma Distribution', 'Gumbel Distribution', 'Student\'s t Distribution'
+                 'Gamma Distribution', 'Gumbel Distribution', 'Student\'s t Distribution',
+                 'F Distribution'
                 )
             )
                 
@@ -422,7 +423,38 @@ if __name__ == '__main__':
                 if reset:
                     st.session_state.clear()
                     st.rerun()
-        
+                    
+            elif add_selectbox2 == 'F Distribution':
+                
+                if st.session_state.get('flag') is None:
+                    st.session_state.clear()
+                    st.session_state.flag = add_selectbox2
+                
+                elif st.session_state.flag != add_selectbox2:
+                    st.session_state.clear()
+                    st.session_state.flag = add_selectbox2
+                    
+                if st.session_state.get('d1_list') is None:
+                    st.session_state.d1_list = []
+                    st.session_state.d2_list = []
+                    
+                d1 = st.slider('Degrees of Freedom (d1)', 1, 100, 1)
+                d2 = st.slider('Degrees of Freedom (d2)', 1, 100, 1)
+                x_range = st.slider('X-axis Range', 1.0, 100.0, 10.0)
+                
+                d1 = st.session_state.d1_list + [d1]
+                d2 = st.session_state.d2_list + [d2]
+                
+                anchor = st.button('Anchor', type='primary')
+                if anchor:
+                    st.session_state.d1_list.append(d1[-1])
+                    st.session_state.d2_list.append(d2[-1])
+                    
+                reset = st.button('Reset', type='primary')
+                if reset:
+                    st.session_state.clear()
+                    st.rerun()
+                
         
     if add_selectbox1 == 'Discrete Distributions':
 
@@ -467,4 +499,6 @@ if __name__ == '__main__':
                 student_t(nu, x_left_range, x_right_range)
             case 'Exponential Power Distribution':
                 exponential_power(llambda, kappa, x_range)
+            case 'F Distribution':
+                F(d1, d2, x_range)
         
