@@ -23,14 +23,57 @@ if __name__ == '__main__':
                 p = st.slider('Probability of Success (p)', 0.0, 1.0, 0.5)
                 
             elif add_selectbox2 == 'Beta-Binomial Distribution':
+                
+                if st.session_state.get('a_list') is None:
+                    st.session_state.a_list = []
+                    st.session_state.b_list = []
+                
                 a = st.slider('Shape Parameter (a)', 0.1, 10.0, 1.0)
                 b = st.slider('Shape Parameter (b)', 0.1, 10.0, 1.0)
                 n = st.slider('Number of Trials (n)', 2, 40, 5)
                 
+                a_list = st.session_state.a_list + [a]
+                b_list = st.session_state.b_list + [b]
+                a = a_list
+                b = b_list
+                
+                anchor = st.button('Anchor', type='primary')
+                if anchor:
+                    st.session_state.a_list.append(a[-1])
+                    st.session_state.b_list.append(b[-1])
+                    
+                reset = st.button('Reset', type='primary')
+                if reset:
+                    st.session_state.a_list = []
+                    st.session_state.b_list = []
+                    st.rerun()
+                
+                
+                
             elif add_selectbox2 == 'Poisson Distribution':
+                
+                if st.session_state.get('llambda_list') is None:
+                    st.session_state.llambda_list = []
+                    st.session_state.t_list = []
+                
                 llambda = st.slider('Rate Parameter (λ)', 0.1, 10.0, 1.0)
                 t = st.slider('Time Interval (t)', 0.1, 10.0, 1.0)
                 k = st.slider('X-axis, Number of Events (k)', 2, 80, 2)
+                
+                llambda_list = st.session_state.llambda_list + [llambda]
+                t_list = st.session_state.t_list + [t]
+                llambda = llambda_list
+                t = t_list
+                
+                anchor = st.button('Anchor', type='primary')
+                if anchor:
+                    st.session_state.llambda_list.append(llambda[-1])
+                    st.session_state.t_list.append(t[-1])
+                    
+                reset = st.button('Reset', type='primary')
+                if reset:
+                    st.session_state.clear()
+                    st.rerun()
             
         elif add_selectbox1 == 'Continuous Distributions':
             add_selectbox2 = st.selectbox(
